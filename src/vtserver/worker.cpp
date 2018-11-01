@@ -203,7 +203,7 @@ void WorkerJobBase::parseFilter(const vtserver_interface::eventFilter &filter, v
 
 
 template<>
-void WorkerJob<const vti::addDatasetRequest, ::rpcz::reply<vti::addDatasetResponse> >
+void WorkerJob<const vti::addDatasetRequest, vti::addDatasetResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -228,13 +228,11 @@ void WorkerJob<const vti::addDatasetRequest, ::rpcz::reply<vti::addDatasetRespon
         res->set_msg(e.message());
     }
 
-    _response.send(reply);
-
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::getDatasetListRequest, ::rpcz::reply<vti::getDatasetListResponse> >
+void WorkerJob<const vti::getDatasetListRequest, vti::getDatasetListResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -262,13 +260,13 @@ void WorkerJob<const vti::getDatasetListRequest, ::rpcz::reply<vti::getDatasetLi
     }
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::getDatasetMetricsRequest, ::rpcz::reply<vti::getDatasetMetricsResponse> >
+void WorkerJob<const vti::getDatasetMetricsRequest, vti::getDatasetMetricsResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -303,13 +301,13 @@ void WorkerJob<const vti::getDatasetMetricsRequest, ::rpcz::reply<vti::getDatase
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::deleteDatasetRequest, ::rpcz::reply<vti::deleteDatasetResponse> >
+void WorkerJob<const vti::deleteDatasetRequest, vti::deleteDatasetResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -338,11 +336,11 @@ void WorkerJob<const vti::deleteDatasetRequest, ::rpcz::reply<vti::deleteDataset
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 }
 
 template<>
-void WorkerJob<const vti::addSequenceRequest, ::rpcz::reply<vti::addSequenceResponse> >
+void WorkerJob<const vti::addSequenceRequest, vti::addSequenceResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -456,13 +454,13 @@ void WorkerJob<const vti::addSequenceRequest, ::rpcz::reply<vti::addSequenceResp
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::getSequenceIDListRequest, ::rpcz::reply<vti::getSequenceIDListResponse> >
+void WorkerJob<const vti::getSequenceIDListRequest, vti::getSequenceIDListResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -488,13 +486,13 @@ void WorkerJob<const vti::getSequenceIDListRequest, ::rpcz::reply<vti::getSequen
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::getSequenceInfoRequest, ::rpcz::reply<vti::getSequenceInfoResponse> >
+void WorkerJob<const vti::getSequenceInfoRequest, vti::getSequenceInfoResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -558,13 +556,13 @@ void WorkerJob<const vti::getSequenceInfoRequest, ::rpcz::reply<vti::getSequence
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::setSequenceInfoRequest, ::rpcz::reply<vti::setSequenceInfoResponse> >
+void WorkerJob<const vti::setSequenceInfoRequest, vti::setSequenceInfoResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -605,13 +603,13 @@ void WorkerJob<const vti::setSequenceInfoRequest, ::rpcz::reply<vti::setSequence
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::deleteSequenceRequest, ::rpcz::reply<vti::deleteSequenceResponse> >
+void WorkerJob<const vti::deleteSequenceRequest, vti::deleteSequenceResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -650,13 +648,13 @@ void WorkerJob<const vti::deleteSequenceRequest, ::rpcz::reply<vti::deleteSequen
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::addTaskRequest, ::rpcz::reply<vti::addTaskResponse> >
+void WorkerJob<const vti::addTaskRequest, vti::addTaskResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -697,13 +695,13 @@ void WorkerJob<const vti::addTaskRequest, ::rpcz::reply<vti::addTaskResponse> >
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::getTaskIDListRequest, ::rpcz::reply<vti::getTaskIDListResponse> >
+void WorkerJob<const vti::getTaskIDListRequest, vti::getTaskIDListResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -729,7 +727,7 @@ void WorkerJob<const vti::getTaskIDListRequest, ::rpcz::reply<vti::getTaskIDList
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -737,7 +735,7 @@ void WorkerJob<const vti::getTaskIDListRequest, ::rpcz::reply<vti::getTaskIDList
 
 
 template<>
-void WorkerJob<const vti::getTaskInfoRequest, ::rpcz::reply<vti::getTaskInfoResponse> >
+void WorkerJob<const vti::getTaskInfoRequest, vti::getTaskInfoResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -802,13 +800,13 @@ void WorkerJob<const vti::getTaskInfoRequest, ::rpcz::reply<vti::getTaskInfoResp
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::getTaskProgressRequest, ::rpcz::reply<vti::getTaskProgressResponse> >
+void WorkerJob<const vti::getTaskProgressRequest, vti::getTaskProgressResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -941,13 +939,13 @@ void WorkerJob<const vti::getTaskProgressRequest, ::rpcz::reply<vti::getTaskProg
 
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::deleteTaskRequest, ::rpcz::reply<vti::deleteTaskResponse> >
+void WorkerJob<const vti::deleteTaskRequest, vti::deleteTaskResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -972,13 +970,13 @@ void WorkerJob<const vti::deleteTaskRequest, ::rpcz::reply<vti::deleteTaskRespon
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::getProcessIDListRequest, ::rpcz::reply<vti::getProcessIDListResponse> >
+void WorkerJob<const vti::getProcessIDListRequest, vti::getProcessIDListResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -1004,13 +1002,13 @@ void WorkerJob<const vti::getProcessIDListRequest, ::rpcz::reply<vti::getProcess
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::getProcessInfoRequest, ::rpcz::reply<vti::getProcessInfoResponse> >
+void WorkerJob<const vti::getProcessInfoRequest, vti::getProcessInfoResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -1078,13 +1076,13 @@ void WorkerJob<const vti::getProcessInfoRequest, ::rpcz::reply<vti::getProcessIn
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::runProcessRequest, ::rpcz::reply<vti::runProcessResponse> >
+void WorkerJob<const vti::runProcessRequest, vti::runProcessResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -1132,13 +1130,13 @@ void WorkerJob<const vti::runProcessRequest, ::rpcz::reply<vti::runProcessRespon
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::stopProcessRequest, ::rpcz::reply<vti::stopProcessResponse> >
+void WorkerJob<const vti::stopProcessRequest, vti::stopProcessResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -1174,14 +1172,14 @@ void WorkerJob<const vti::stopProcessRequest, ::rpcz::reply<vti::stopProcessResp
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 
 template<>
-void WorkerJob<const vti::getEventImageRequest, ::rpcz::reply<vti::getEventImageResponse> >
+void WorkerJob<const vti::getEventImageRequest, vti::getEventImageResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -1222,14 +1220,14 @@ void WorkerJob<const vti::getEventImageRequest, ::rpcz::reply<vti::getEventImage
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 
 template<>
-void WorkerJob<const vti::getEventDescriptorRequest, ::rpcz::reply<vti::getEventDescriptorResponse> >
+void WorkerJob<const vti::getEventDescriptorRequest, vti::getEventDescriptorResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -1273,14 +1271,14 @@ void WorkerJob<const vti::getEventDescriptorRequest, ::rpcz::reply<vti::getEvent
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 
 template<>
-void WorkerJob<const vti::getEventListRequest, ::rpcz::reply<vti::getEventListResponse> >
+void WorkerJob<const vti::getEventListRequest, vti::getEventListResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -1387,13 +1385,13 @@ void WorkerJob<const vti::getEventListRequest, ::rpcz::reply<vti::getEventListRe
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::getEventsStatsRequest, ::rpcz::reply<vti::getEventsStatsResponse> >
+void WorkerJob<const vti::getEventsStatsRequest, vti::getEventsStatsResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -1477,13 +1475,13 @@ void WorkerJob<const vti::getEventsStatsRequest, ::rpcz::reply<vti::getEventsSta
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }
 
 template<>
-void WorkerJob<const vti::getProcessingMetadataRequest, ::rpcz::reply<vti::getProcessingMetadataResponse> >
+void WorkerJob<const vti::getProcessingMetadataRequest, vti::getProcessingMetadataResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
@@ -1577,7 +1575,7 @@ void WorkerJob<const vti::getProcessingMetadataRequest, ::rpcz::reply<vti::getPr
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
+    
 
     VTSERVER_DEBUG_REPLY;
 }

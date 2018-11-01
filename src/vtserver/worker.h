@@ -2,7 +2,7 @@
 
 #include "interproc.h"
 #include <vtapi/vtapi.h>
-#include "vtserver_interface.rpcz.h"
+#include "vtserver_interface.grpc.pb.h"
 #include <thread>
 #include <mutex>
 #include <condition_variable>

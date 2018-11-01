@@ -11,8 +11,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   INSTALL_RPATH ${VTAPI_LIBRARY_PATH}
 )
 
-find_library(rpcz_LIBRARY rpcz)
-find_library(zmq3_LIBRARY zmq zmq3)
+list(APPEND CMAKE_PREFIX_PATH "/home/imaterna/grpc/libs/opt/")
+
+find_package(Protobuf REQUIRED)
+# find_package(GRPC REQUIRED)
+
+find_library(grpc_LIBRARY grpc)
+find_library(grpc_unsecure_LIBRARY grpc++_unsecure)
 find_library(protobuf_LIBRARY protobuf)
 find_library(boost_system_LIBRARY boost_system)
 find_library(boost_thread_LIBRARY boost_thread)
@@ -20,8 +25,8 @@ find_library(boost_program_options_LIBRARY boost_program_options)
 find_library(vtapi ${VTAPI_CURRENT_PATH})
 target_link_libraries(${PROJECT_NAME}
     vtapi
-    ${rpcz_LIBRARY}
-    ${zmq3_LIBRARY}
+    ${grpc_unsecure_LIBRARY}
+    ${grpc_LIBRARY}
     ${protobuf_LIBRARY}
     ${boost_system_LIBRARY}
     ${boost_thread_LIBRARY}
