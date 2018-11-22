@@ -212,6 +212,11 @@ void VTServer::getEventDescriptor(const vti::getEventDescriptorRequest &request,
     processRequest(request, response);
 }
 
+void VTServer::getEventColorDescriptor(const vti::getEventColorDescriptorRequest &request, ::rpcz::reply<vti::getEventColorDescriptorResponse> response)
+{
+    processRequest(request, response);
+}
+
 void VTServer::getEventList(const vti::getEventListRequest &request, ::rpcz::reply<vti::getEventListResponse> response)
 {
     processRequest(request, response);

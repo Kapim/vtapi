@@ -253,6 +253,12 @@ bool SLQueryBuilder::keyEdfDescriptor(const string &key, const EyedeaEdfDescript
     return false;
 }
 
+bool SLQueryBuilder::keyColorDescriptor(const string &key, const std::vector<float> &value, const string &from)
+{
+    throw RuntimeException("unimplemented");
+    return false;
+}
+
 bool SLQueryBuilder::keyProcessStatus(const string &key, ProcessState::Status value, const string &from)
 {
     throw RuntimeException("unimplemented");
@@ -428,7 +434,11 @@ bool SLQueryBuilder::whereEdfDescriptor(const string &key, const EyedeaEdfDescri
     return false;
 }
 
-
+bool SLQueryBuilder::whereColorDescriptor(const string &key, const std::vector<float> &value, const string &oper, const string &from)
+{
+    throw RuntimeException("unimplemented");
+    return false;
+}
 
 string SLQueryBuilder::escapeColumn(const string& key, const string& table)
 {

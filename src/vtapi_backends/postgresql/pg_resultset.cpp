@@ -257,6 +257,12 @@ EyedeaEdfDescriptor PGResultSet::getEdfDescriptor(int col) const
     return GetterSingle<PGresult*,EyedeaEdfDescriptor>::get(static_cast<const PGresult *>(_res), _pos, col, "%public.eyedea_edfdescriptor");
 }
 
+vector<float> PGResultSet::getColorDescriptor(int col) const
+{
+   // return GetterSingle<PGresult*,std::vector<float> >::get(static_cast<const PGresult *>(_res), _pos, col, "%float[]");
+    return getFloatVector<float>(col);
+}
+
 ProcessState PGResultSet::getProcessState(int col) const
 {
     return GetterSingle<PGresult*,ProcessState>::get(static_cast<const PGresult *>(_res), _pos, col, "%public.pstate");

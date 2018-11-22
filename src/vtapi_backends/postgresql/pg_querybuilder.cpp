@@ -591,6 +591,35 @@ bool PGQueryBuilder::keyEdfDescriptor(const string &key, const EyedeaEdfDescript
     return ret;
 }
 
+bool PGQueryBuilder::keyColorDescriptor(const string &key, const std::vector<float> &value, const string &from)
+{
+    /*bool ret = true;
+    PGparam *colordesc = NULL;
+
+    do {
+        // user data
+        PGbytea data = { (int) value.data.size(), (char*) value.data.data() };
+
+        // create interval event composite
+        colordesc = PQparamCreate((PGconn *) _connection.getConnectionObject());
+        if (! colordesc) {
+            ret = false;
+            break;
+        }
+
+        ret = (0 != PQputf(colordesc, "%bytea*", &data));
+
+        if (! ret) break;
+
+        ret = keySingleValue(key, colordesc, "%public.utia_colordescriptor", from);
+    } while (0);
+
+    if (colordesc) PQparamClear(colordesc);
+
+    return ret;*/
+    return keyVector(key, value, "%float4", "%float4[]", from);
+}
+
 
 bool PGQueryBuilder::keyProcessStatus(const string& key, ProcessState::Status value, const string& from)
 {
@@ -822,6 +851,21 @@ bool PGQueryBuilder::whereEdfDescriptor(const string& key, const EyedeaEdfDescri
     else {
         return whereKeyNull(key, false, from);
     }
+}
+
+bool PGQueryBuilder::whereColorDescriptor(const string& key, const std::vector<float>& values, const string& oper, const string& from)
+{
+    /*if (colordesc.size()) {
+        PGbytea data = { (int) colordesc.data.size(), (char*) colordesc.data.data() };
+        return whereSingleValue(key, &data, "%public.utia_colordescriptor", oper, from);
+    }
+    else {
+        return whereKeyNull(key, false, from);
+    }*/
+
+    string exp = constructColumn(key, from);
+    string listval = serializeVector(values);
+    _listWhere.push_back(WhereItem(exp, oper, listval));
 }
 
 

@@ -424,6 +424,18 @@ public:
                           const EyedeaEdfDescriptor &value,
                           const std::string &from) override;
 
+     /**
+      * This is a persistent function to add keys (columns) and values
+      * It may be called several times.
+      * @param key key
+      * @param value value
+      * @param from selection (table; this is optional)
+      * @return success
+      */
+      bool keyColorDescriptor(const std::string &key,
+                           const std::vector<float> &value,
+                           const std::string &from) override;
+
     /**
      * This is a persistent function to add keys (columns) and values
      * It may be called several times.
@@ -801,6 +813,20 @@ public:
                             const EyedeaEdfDescriptor &edfdesc,
                             const std::string &oper = std::string("="),
                             const std::string &from = std::string()) override;
+
+     /**
+      * WHERE statement part for ColorDescriptor
+      * It can be called several times.
+      * @param key key to compare with the value
+      * @param value requested value for key
+      * @param oper comparision operator between key and value
+      * @param from table where the key is situated
+      * @return success
+      */
+     virtual bool whereColorDescriptor(const std::string &key,
+                             const std::vector<float> &colordesc,
+                             const std::string &oper = std::string("="),
+                             const std::string &from = std::string()) override;
 
     // ////////////////////////////////////////////////////////////////////////
     // OWN IMPLEMENTATION

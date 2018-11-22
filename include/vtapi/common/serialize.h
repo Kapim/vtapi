@@ -200,7 +200,6 @@ inline std::string toString <EyedeaEdfDescriptor>(const EyedeaEdfDescriptor &val
     return ostr.str();
 }
 
-
 template <>
 inline std::string toString <ProcessState>(const ProcessState& value)
 {

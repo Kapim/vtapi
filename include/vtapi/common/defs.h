@@ -89,6 +89,7 @@ extern const std::string def_col_int_imglocation;
 extern const std::string def_col_int_rtstart;
 extern const std::string def_col_int_seclength;
 extern const std::string def_col_int_edfdesc;
+extern const std::string def_col_int_colordesc;
 extern const std::string def_col_int_created;
 
 extern const std::string def_col_prs_prsid;

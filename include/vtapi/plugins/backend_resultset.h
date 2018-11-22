@@ -215,6 +215,13 @@ public:
     virtual EyedeaEdfDescriptor getEdfDescriptor(int col) const = 0;
 
     /**
+     * Get ColorDescriptor by column index
+     * @param col column index
+     * @return ColorDescriptor class
+     */
+    virtual std::vector<float> getColorDescriptor(int col) const = 0;
+
+    /**
      * Gets process state by an index of a column
      * @param col   index of the column
      * @return process state class
@@ -416,6 +423,14 @@ public:
      */
     inline EyedeaEdfDescriptor getEdfDescriptor(const std::string &key) const
     { return this->getEdfDescriptor(this->getKeyIndex(key)); }
+
+    /**
+     * Get ColorDescriptor by column key
+     * @param key column key
+     * @return ColorDescriptor class
+     */
+    inline std::vector<float> getColorDescriptor(const std::string &key) const
+    { return this->getColorDescriptor(this->getKeyIndex(key)); }
 
     /**
      * Gets process state by an key of a column

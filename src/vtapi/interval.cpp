@@ -157,6 +157,11 @@ EyedeaEdfDescriptor Interval::getEdfDesc() const
     return this->getEdfDescriptor(def_col_int_edfdesc);
 }
 
+std::vector<float> Interval::getColorDesc() const
+{
+    return this->getColorDescriptor(def_col_int_colordesc);
+}
+
 chrono::system_clock::time_point Interval::calculateRealStartTime()
 {
     if (!_pparent_vid) {

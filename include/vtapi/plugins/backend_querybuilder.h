@@ -445,6 +445,18 @@ public:
      * @param from selection (table; this is optional)
      * @return success
      */
+    virtual bool keyColorDescriptor(const std::string &key,
+                                  const std::vector<float> &value,
+                                  const std::string& = std::string()) = 0;
+
+    /**
+     * This is a persistent function to add keys (columns) and values
+     * It may be called several times.
+     * @param key key
+     * @param value value
+     * @param from selection (table; this is optional)
+     * @return success
+     */
     virtual bool keyProcessStatus(const std::string& key,
                                   ProcessState::Status value,
                                   const std::string& = std::string()) = 0;
@@ -815,7 +827,19 @@ public:
                             const std::string &oper = std::string("="),
                             const std::string &from = std::string()) = 0;
 
-
+    /**
+     * WHERE statement part for EdfDescriptor
+     * It can be called several times.
+     * @param key key to compare with the value
+     * @param value requested value for key
+     * @param oper comparision operator between key and value
+     * @param from table where the key is situated
+     * @return success
+     */
+    virtual bool whereColorDescriptor(const std::string &key,
+                            const std::vector<float> &edfdesc,
+                            const std::string &oper = std::string("="),
+                            const std::string &from = std::string()) = 0;
 
     // ////////////////////////////////////////////////////////////////////////
     // IMPLEMENTED METHODS

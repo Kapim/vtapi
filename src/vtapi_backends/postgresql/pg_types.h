@@ -256,6 +256,20 @@ public:
     }
 };
 
+/*
+template <>
+class TypeConverterDatabase< PGbytea,std::vector<float> >
+{
+public:
+    static std::vector<float> convert(PGbytea &val)
+    {
+        if (val.len > 0)
+            return std::vector<float>(val.data, val.data + val.len);
+        else
+            return std::vector<float>();
+    }
+};*/
+
 
 
 template <>

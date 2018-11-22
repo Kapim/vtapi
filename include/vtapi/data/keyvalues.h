@@ -410,6 +410,36 @@ public:
 
 
     /**
+     * Gets ColorDescriptor by a column key
+     * @param key   column key
+     * @return interval ColorDescriptor
+     */
+    inline std::vector<float> getColorDescriptor(const std::string& key) const
+    {
+        std::vector<float> data;
+        try {
+            data = _select._presultset->getColorDescriptor(key);
+        }
+        catch (vtapi::RuntimeException & e) {}
+        return data;
+    }
+
+    /**
+     * Gets ColorDescriptor by an index of a column
+     * @param col   index of the column
+     * @return interval ColorDescriptor
+     */
+    inline std::vector<float> getColorDescriptor(int col) const
+    {
+        std::vector<float> data;
+        try {
+            data = _select._presultset->getColorDescriptor(col);
+        }
+        catch (vtapi::RuntimeException & e) {}
+        return data;
+    }
+
+    /**
      * Gets process state by a column key
      * @param key   column key
      * @return process state class
@@ -610,6 +640,15 @@ public:
      */
     inline bool updateEdfDescriptor(const std::string& key, const EyedeaEdfDescriptor &value)
     { return update()._pquerybuilder->keyEdfDescriptor(key, value); }
+
+    /**
+     * Sets a new ColorDescriptor of a specified key
+     * @param key column key to update
+     * @param ColorDescriptor value
+     * @return success
+     */
+    inline bool updateColorDescriptor(const std::string& key, const std::vector<float> &value)
+    { return update()._pquerybuilder->keyColorDescriptor(key, value); }
 
 
     /**

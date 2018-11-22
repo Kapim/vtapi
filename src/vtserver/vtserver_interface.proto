@@ -393,6 +393,18 @@ message getEventDescriptorResponse {
   repeated int64 desc_data = 3;
 }
 
+// getEventColorDescriptor (string #datasetID, string #taskID, int #event_id) → (float desc_data[])
+message getEventColorDescriptorRequest {
+  required string dataset_id = 1;
+  required string task_id = 2;
+  required int64 event_id = 3;
+}
+
+message getEventColorDescriptorResponse {
+  optional requestResult res = 1;
+  repeated float desc_data = 2;
+}
+
 // getEventList (string #datasetID, string #sequenceIDs[], string #taskID, event_filter filter) → event_info_list events_list[]
 message getEventListRequest {
   required string dataset_id = 1;
@@ -471,6 +483,7 @@ service VTServerInterface {
   rpc stopProcess(stopProcessRequest) returns(stopProcessResponse);
   rpc getEventImage(getEventImageRequest) returns(getEventImageResponse);
   rpc getEventDescriptor(getEventDescriptorRequest) returns(getEventDescriptorResponse);
+  rpc getEventColorDescriptor(getEventColorDescriptorRequest) returns(getEventColorDescriptorResponse);
   rpc getEventList(getEventListRequest) returns(getEventListResponse);
   rpc getEventsStats(getEventsStatsRequest) returns(getEventsStatsResponse);
   rpc getProcessingMetadata(getProcessingMetadataRequest) returns(getProcessingMetadataResponse);

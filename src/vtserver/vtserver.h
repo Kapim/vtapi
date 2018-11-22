@@ -46,6 +46,7 @@ namespace vtserver {
     void stopProcess(const vtserver_interface::stopProcessRequest &request, ::rpcz::reply<vtserver_interface::stopProcessResponse> response);
     void getEventImage(const vtserver_interface::getEventImageRequest &request, ::rpcz::reply<vtserver_interface::getEventImageResponse> response);
     void getEventDescriptor(const vtserver_interface::getEventDescriptorRequest &request, ::rpcz::reply<vtserver_interface::getEventDescriptorResponse> response);
+    void getEventColorDescriptor(const vtserver_interface::getEventColorDescriptorRequest &request, ::rpcz::reply<vtserver_interface::getEventColorDescriptorResponse> response);
     void getEventList(const vtserver_interface::getEventListRequest &request, ::rpcz::reply<vtserver_interface::getEventListResponse> response);
     void getEventsStats(const vtserver_interface::getEventsStatsRequest &request, ::rpcz::reply<vtserver_interface::getEventsStatsResponse> response);
     void getProcessingMetadata(const vtserver_interface::getProcessingMetadataRequest &request, ::rpcz::reply<vtserver_interface::getProcessingMetadataResponse> response);

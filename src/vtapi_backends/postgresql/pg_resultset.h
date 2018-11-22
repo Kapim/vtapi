@@ -205,6 +205,13 @@ public:
     EyedeaEdfDescriptor getEdfDescriptor(int col) const override;
 
     /**
+     * Get ColorDescriptor by column index
+     * @param col column index
+     * @return ColorDescriptor class
+     */
+    std::vector<float> getColorDescriptor(int col) const override;
+
+    /**
      * Gets process state by an index of a column
      * @param col   index of the column
      * @return process state class

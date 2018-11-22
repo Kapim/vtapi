@@ -77,6 +77,7 @@ const std::string def_col_int_imglocation = "imglocation";
 const std::string def_col_int_rtstart = "rt_start";
 const std::string def_col_int_seclength = "sec_length";
 const std::string def_col_int_edfdesc = "edfdesc";
+const std::string def_col_int_colordesc = "colordesc";
 const std::string def_col_int_created = "created";
 
 const std::string def_col_prs_prsid = "prsid";

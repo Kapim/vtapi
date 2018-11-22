@@ -1278,6 +1278,54 @@ void WorkerJob<const vti::getEventDescriptorRequest, ::rpcz::reply<vti::getEvent
     VTSERVER_DEBUG_REPLY;
 }
 
+template<>
+void WorkerJob<const vti::getEventColorDescriptorRequest, ::rpcz::reply<vti::getEventColorDescriptorResponse> >
+::process(Args & args)
+{
+    VTSERVER_DEBUG_REQUEST;
+
+    vti::getEventColorDescriptorResponse reply;
+    vti::requestResult *res = new vti::requestResult();
+
+    Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
+    if (ds->next()) {
+        Task *ts =  ds->loadTasks(_request.task_id());
+        if (ts->next()) {
+            res->set_success(true);
+            Interval *outdata = ts->loadOutputData();
+            if (outdata) {
+                outdata->filterById(_request.event_id());
+                if (outdata->next()) {
+                    res->set_success(true);
+                    std::vector<float> colordesc = outdata->getColorDesc();
+                    for (int i = 0; i < colordesc.size(); i++) {
+                        reply.add_desc_data(colordesc[i]);
+                    }
+                }
+                else {
+                    res->set_success(false);
+                    res->set_msg("Cannot find event created by given task and dataset");
+                }
+            }
+            delete outdata;
+        }
+        else {
+            res->set_success(false);
+            res->set_msg("Cannot find task");
+        }
+        delete ts;
+    }
+    else {
+        res->set_success(false);
+        res->set_msg("Cannot find dataset");
+    }
+    delete ds;
+
+    reply.set_allocated_res(res);
+    _response.send(reply);
+
+    VTSERVER_DEBUG_REPLY;
+}
 
 template<>
 void WorkerJob<const vti::getEventListRequest, ::rpcz::reply<vti::getEventListResponse> >
@@ -1367,7 +1415,8 @@ void WorkerJob<const vti::getEventListRequest, ::rpcz::reply<vti::getEventListRe
                         reg->set_y1(ev.region.high.y);
                         reg->set_y2(ev.region.low.y);
                         EyedeaEdfDescriptor edfdesc = outdata->getEdfDesc();
-                        reg->set_has_descriptor((bool) edfdesc.data.size());
+                        std::vector<float> colordesc = outdata->getColorDesc();
+                        reg->set_has_descriptor((bool) edfdesc.data.size() || (bool) colordesc.size());
                         reg->set_region_id(outdata->getId());
                     }
                 }

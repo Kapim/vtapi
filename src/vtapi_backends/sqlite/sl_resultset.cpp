@@ -191,6 +191,12 @@ EyedeaEdfDescriptor SLResultSet::getEdfDescriptor(int col) const
     return EyedeaEdfDescriptor();
 }
 
+std::vector<float> SLResultSet::getColorDescriptor(int col) const
+{
+    throw RuntimeException("unimplemented");
+    return std::vector<float>();
+}
+
 ProcessState SLResultSet::getProcessState(int col) const
 {
     throw RuntimeException("unimplemented");

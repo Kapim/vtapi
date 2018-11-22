@@ -134,6 +134,12 @@ public:
     EyedeaEdfDescriptor getEdfDesc() const;
 
     /**
+     * Gets an ColorDescriptor of the current interval
+     * @return ColorDescriptor
+     */
+    std::vector<float> getColorDesc() const;
+
+    /**
      * Gets real start time of the current interval
      * @return start time
      */
