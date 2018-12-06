@@ -1277,7 +1277,7 @@ void WorkerJob<const vti::getEventDescriptorRequest, vti::getEventDescriptorResp
 }
 
 template<>
-void WorkerJob<const vti::getEventColorDescriptorRequest, ::rpcz::reply<vti::getEventColorDescriptorResponse> >
+void WorkerJob<const vti::getEventColorDescriptorRequest, vti::getEventColorDescriptorResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
