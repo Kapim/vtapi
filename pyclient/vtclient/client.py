@@ -39,13 +39,13 @@ class VTServerClient(object):
             try:
                 response = srv_method(to_protobuf(request, req), timeout = deadline_ms/1000.0)
             except AttributeError:
-                print "[Client error]: Request must be a dictionary."
+                print("[Client error]: Request must be a dictionary.")
                 raise VTServerException('Request must be a dictionary.')
             except EncodeError:
-                print "[Client error]: Request is not correct (some required field is missing?)."
+                print("[Client error]: Request is not correct (some required field is missing?).")
                 raise VTServerException('Request is not correct (some required field is missing?).')
             except grpc.FutureTimeoutError:
-                print "[Client error]: No answer from server in given time."
+                print("[Client error]: No answer from server in given time.")
                 return {'res': {'success': False, 'error': 'No answer from server in given time.'}}
                 #raise VTServerException('No answer from server in given time.')
 
