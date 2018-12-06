@@ -1320,7 +1320,6 @@ void WorkerJob<const vti::getEventColorDescriptorRequest, vti::getEventColorDesc
     delete ds;
 
     reply.set_allocated_res(res);
-    _response.send(reply);
 
     VTSERVER_DEBUG_REPLY;
 }
