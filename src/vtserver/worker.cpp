@@ -191,11 +191,10 @@ void WorkerJobBase::parseFilter(const vtserver_interface::eventFilter &filter, v
     vti::requestResult *res = new vti::requestResult();\
     res->set_success(false);\
     reply.set_allocated_res(res);
-
 #ifdef VTSERVER_DEBUG
 #define VTSERVER_DEBUG_REQUEST  cout << _request.GetTypeName() << " : " <<\
                                 _request.ShortDebugString() << endl;
-#define VTSERVER_DEBUG_REPLY    cout << reply.ShortDebugString() << endl;
+#define VTSERVER_DEBUG_REPLY    cout << _response.ShortDebugString() << endl;
 #else
 #define VTSERVER_DEBUG_REQUEST
 #define VTSERVER_DEBUG_REPLY
@@ -207,7 +206,8 @@ void WorkerJob<const vti::addDatasetRequest, vti::addDatasetResponse >
 ::process(Args & args)
 {
     VTSERVER_DEBUG_REQUEST;
-    VTSERVER_PREPARE_REPLY(vti::addDatasetResponse, reply, res);
+    vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     try
     {
@@ -217,7 +217,7 @@ void WorkerJob<const vti::addDatasetRequest, vti::addDatasetResponse >
                                       _request.has_description() ? _request.description() : string()));
         if (ds) {
             res->set_success(true);
-            reply.set_dataset_id(ds->getName());
+            _response.set_dataset_id(ds->getName());
         }
         else {
             res->set_msg("Dataset creation failed");
@@ -228,6 +228,7 @@ void WorkerJob<const vti::addDatasetRequest, vti::addDatasetResponse >
         res->set_msg(e.message());
     }
 
+
     VTSERVER_DEBUG_REPLY;
 }
 
@@ -237,15 +238,15 @@ void WorkerJob<const vti::getDatasetListRequest, vti::getDatasetListResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getDatasetListResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets();
     if (ds) {
         res->set_success(true);
 
         while (ds->next()) {
-            vti::datasetInfo* info = reply.add_datasets();
+            vti::datasetInfo* info = _response.add_datasets();
             info->set_dataset_id(ds->getName());
             info->set_name(ds->getName());
             info->set_friendly_name(ds->getFriendlyName());
@@ -259,7 +260,6 @@ void WorkerJob<const vti::getDatasetListRequest, vti::getDatasetListResponse >
         res->set_msg("Failed to load datasets");
     }
 
-    reply.set_allocated_res(res);
     
 
     VTSERVER_DEBUG_REPLY;
@@ -271,8 +271,8 @@ void WorkerJob<const vti::getDatasetMetricsRequest, vti::getDatasetMetricsRespon
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getDatasetMetricsResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -280,7 +280,7 @@ void WorkerJob<const vti::getDatasetMetricsRequest, vti::getDatasetMetricsRespon
 
         vti::datasetMetrics *metrics = new vti::datasetMetrics();
         metrics->set_dataset_id(ds->getName());
-        reply.set_allocated_metrics(metrics);
+        _response.set_allocated_metrics(metrics);
 
         Sequence *seq = ds->loadSequences();
         metrics->set_sequence_count(seq->count());
@@ -300,8 +300,7 @@ void WorkerJob<const vti::getDatasetMetricsRequest, vti::getDatasetMetricsRespon
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -312,8 +311,8 @@ void WorkerJob<const vti::deleteDatasetRequest, vti::deleteDatasetResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::deleteDatasetResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -335,7 +334,7 @@ void WorkerJob<const vti::deleteDatasetRequest, vti::deleteDatasetResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
+
     
 }
 
@@ -345,8 +344,8 @@ void WorkerJob<const vti::addSequenceRequest, vti::addSequenceResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::addSequenceResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -428,7 +427,7 @@ void WorkerJob<const vti::addSequenceRequest, vti::addSequenceResponse >
 
             if (seq) {
                 res->set_success(true);
-                reply.set_sequence_id(seq->getName());
+                _response.set_sequence_id(seq->getName());
                 delete seq;
             }
             else {
@@ -453,8 +452,7 @@ void WorkerJob<const vti::addSequenceRequest, vti::addSequenceResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -465,8 +463,8 @@ void WorkerJob<const vti::getSequenceIDListRequest, vti::getSequenceIDListRespon
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getSequenceIDListResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -474,7 +472,7 @@ void WorkerJob<const vti::getSequenceIDListRequest, vti::getSequenceIDListRespon
 
         Sequence *seq = ds->loadSequences();
         while (seq->next()) {
-            string* info = reply.add_sequence_ids();
+            string* info = _response.add_sequence_ids();
             *info = seq->getName();
         }
         delete seq;
@@ -485,8 +483,7 @@ void WorkerJob<const vti::getSequenceIDListRequest, vti::getSequenceIDListRespon
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -497,8 +494,8 @@ void WorkerJob<const vti::getSequenceInfoRequest, vti::getSequenceInfoResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getSequenceInfoResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -518,7 +515,7 @@ void WorkerJob<const vti::getSequenceInfoRequest, vti::getSequenceInfoResponse >
 
         // iterate over sequences
         while (seq->next()) {
-            vti::sequenceInfo *info = reply.add_sequences();
+            vti::sequenceInfo *info = _response.add_sequences();
             info->set_sequence_id(seq->getName());
             info->set_filepath(seq->getDataLocation());
             info->set_location(seq->getLocation());
@@ -555,8 +552,7 @@ void WorkerJob<const vti::getSequenceInfoRequest, vti::getSequenceInfoResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -567,8 +563,8 @@ void WorkerJob<const vti::setSequenceInfoRequest, vti::setSequenceInfoResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::setSequenceInfoResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -602,8 +598,7 @@ void WorkerJob<const vti::setSequenceInfoRequest, vti::setSequenceInfoResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -614,8 +609,8 @@ void WorkerJob<const vti::deleteSequenceRequest, vti::deleteSequenceResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::deleteSequenceResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -647,8 +642,7 @@ void WorkerJob<const vti::deleteSequenceRequest, vti::deleteSequenceResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -659,8 +653,8 @@ void WorkerJob<const vti::addTaskRequest, vti::addTaskResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::addTaskResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -680,7 +674,7 @@ void WorkerJob<const vti::addTaskRequest, vti::addTaskResponse >
         }
         if (ts) {
             res->set_success(true);
-            reply.set_task_id(ts->getName());
+            _response.set_task_id(ts->getName());
             delete ts;
         }
         else {
@@ -694,8 +688,7 @@ void WorkerJob<const vti::addTaskRequest, vti::addTaskResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -706,8 +699,8 @@ void WorkerJob<const vti::getTaskIDListRequest, vti::getTaskIDListResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getTaskIDListResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -715,7 +708,7 @@ void WorkerJob<const vti::getTaskIDListRequest, vti::getTaskIDListResponse >
 
         Task *ts = ds->loadTasks();
         while (ts->next()) {
-            string* info = reply.add_task_ids();
+            string* info = _response.add_task_ids();
             *info = ts->getName();
         }
         delete ts;
@@ -726,8 +719,7 @@ void WorkerJob<const vti::getTaskIDListRequest, vti::getTaskIDListResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -740,8 +732,8 @@ void WorkerJob<const vti::getTaskInfoRequest, vti::getTaskInfoResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getTaskInfoResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (ds->next()) {
@@ -761,7 +753,7 @@ void WorkerJob<const vti::getTaskInfoRequest, vti::getTaskInfoResponse >
 
         // iterate over tasks
         while (ts->next()) {
-            vti::taskInfo *info = reply.add_tasks();
+            vti::taskInfo *info = _response.add_tasks();
             info->set_task_id(ts->getName());
 
             info->set_module(ts->getParentMethodName());
@@ -799,8 +791,7 @@ void WorkerJob<const vti::getTaskInfoRequest, vti::getTaskInfoResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -811,8 +802,8 @@ void WorkerJob<const vti::getTaskProgressRequest, vti::getTaskProgressResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getTaskProgressResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -847,7 +838,7 @@ void WorkerJob<const vti::getTaskProgressRequest, vti::getTaskProgressResponse >
             res->set_success(true);
 
             vti::taskProgress *tp = new vti::taskProgress();
-            reply.set_allocated_task_progress(tp);
+            _response.set_allocated_task_progress(tp);
 
             Method *mt = ts->getParentMethod();
             if (mt && ! mt->isProgressBasedOnSeq()) {
@@ -938,8 +929,7 @@ void WorkerJob<const vti::getTaskProgressRequest, vti::getTaskProgressResponse >
     delete ds;
 
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -950,8 +940,8 @@ void WorkerJob<const vti::deleteTaskRequest, vti::deleteTaskResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::deleteTaskResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -969,8 +959,7 @@ void WorkerJob<const vti::deleteTaskRequest, vti::deleteTaskResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -981,8 +970,8 @@ void WorkerJob<const vti::getProcessIDListRequest, vti::getProcessIDListResponse
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getProcessIDListResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -990,7 +979,7 @@ void WorkerJob<const vti::getProcessIDListRequest, vti::getProcessIDListResponse
 
         Process *prs = ds->loadProcesses();
         while (prs->next()) {
-            string* info = reply.add_process_ids();
+            string* info = _response.add_process_ids();
             *info = toString<int>(prs->getId());
         }
         delete prs;
@@ -1001,8 +990,7 @@ void WorkerJob<const vti::getProcessIDListRequest, vti::getProcessIDListResponse
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -1013,8 +1001,8 @@ void WorkerJob<const vti::getProcessInfoRequest, vti::getProcessInfoResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getProcessInfoResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -1034,7 +1022,7 @@ void WorkerJob<const vti::getProcessInfoRequest, vti::getProcessInfoResponse >
 
         // iterate over processes
         while (prs->next()) {
-            vti::processInfo *info = reply.add_processes();
+            vti::processInfo *info = _response.add_processes();
             info->set_process_id(toString<int>(prs->getId()));
             info->set_assigned_task_id(prs->getParentTaskName());
 
@@ -1075,8 +1063,7 @@ void WorkerJob<const vti::getProcessInfoRequest, vti::getProcessInfoResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -1087,8 +1074,8 @@ void WorkerJob<const vti::runProcessRequest, vti::runProcessResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::runProcessResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -1104,7 +1091,7 @@ void WorkerJob<const vti::runProcessRequest, vti::runProcessResponse >
                 if (ipc) {
                     args._ipc.addClientInstance(ipc);
                     res->set_success(true);
-                    reply.set_process_id(toString<int>(prs->getId()));
+                    _response.set_process_id(toString<int>(prs->getId()));
                 }
                 else {
                     res->set_success(false);
@@ -1129,8 +1116,7 @@ void WorkerJob<const vti::runProcessRequest, vti::runProcessResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -1141,8 +1127,8 @@ void WorkerJob<const vti::stopProcessRequest, vti::stopProcessResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::stopProcessResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (!_request.dataset_id().empty() && ds->next()) {
@@ -1171,8 +1157,7 @@ void WorkerJob<const vti::stopProcessRequest, vti::stopProcessResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -1184,8 +1169,8 @@ void WorkerJob<const vti::getEventImageRequest, vti::getEventImageResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getEventImageResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (ds->next()) {
@@ -1198,7 +1183,7 @@ void WorkerJob<const vti::getEventImageRequest, vti::getEventImageResponse >
                 if (outdata->next()) {
                     res->set_success(true);
                     std::vector<char> blob = outdata->getBlob("eventimg");
-                    reply.set_event_img(std::string(blob.begin(), blob.end()));
+                    _response.set_event_img(std::string(blob.begin(), blob.end()));
                 }
                 else {
                     res->set_success(false);
@@ -1219,8 +1204,7 @@ void WorkerJob<const vti::getEventImageRequest, vti::getEventImageResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -1232,8 +1216,8 @@ void WorkerJob<const vti::getEventDescriptorRequest, vti::getEventDescriptorResp
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getEventDescriptorResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (ds->next()) {
@@ -1246,9 +1230,9 @@ void WorkerJob<const vti::getEventDescriptorRequest, vti::getEventDescriptorResp
                 if (outdata->next()) {
                     res->set_success(true);
                     EyedeaEdfDescriptor edfdesc = outdata->getEdfDesc();
-                    reply.set_desc_version(edfdesc.version);
+                    _response.set_desc_version(edfdesc.version);
                     for (int i = 0; i < edfdesc.data.size(); i++) {
-                        reply.add_desc_data(edfdesc.data[i]);
+                        _response.add_desc_data(edfdesc.data[i]);
                     }
                 }
                 else {
@@ -1270,8 +1254,7 @@ void WorkerJob<const vti::getEventDescriptorRequest, vti::getEventDescriptorResp
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -1282,8 +1265,8 @@ void WorkerJob<const vti::getEventColorDescriptorRequest, vti::getEventColorDesc
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getEventColorDescriptorResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (ds->next()) {
@@ -1297,7 +1280,7 @@ void WorkerJob<const vti::getEventColorDescriptorRequest, vti::getEventColorDesc
                     res->set_success(true);
                     std::vector<float> colordesc = outdata->getColorDesc();
                     for (int i = 0; i < colordesc.size(); i++) {
-                        reply.add_desc_data(colordesc[i]);
+                        _response.add_desc_data(colordesc[i]);
                     }
                 }
                 else {
@@ -1319,7 +1302,6 @@ void WorkerJob<const vti::getEventColorDescriptorRequest, vti::getEventColorDesc
     }
     delete ds;
 
-    reply.set_allocated_res(res);
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -1330,8 +1312,8 @@ void WorkerJob<const vti::getEventListRequest, vti::getEventListResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getEventListResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (ds->next()) {
@@ -1369,7 +1351,7 @@ void WorkerJob<const vti::getEventListRequest, vti::getEventListResponse >
                 string seqname = outdata->getParentSequenceName();
                 auto it = seq_infos.find(seqname);
                 if (it == seq_infos.end()) {
-                    info = reply.add_events_list();
+                    info = _response.add_events_list();
                     info->set_sequence_id(seqname);
                     seq_infos.insert(std::make_pair(seqname,info));
                 }
@@ -1432,8 +1414,7 @@ void WorkerJob<const vti::getEventListRequest, vti::getEventListResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -1444,8 +1425,8 @@ void WorkerJob<const vti::getEventsStatsRequest, vti::getEventsStatsResponse >
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getEventsStatsResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (ds->next()) {
@@ -1478,7 +1459,7 @@ void WorkerJob<const vti::getEventsStatsRequest, vti::getEventsStatsResponse >
 
             // initialize stats structures for all sequences
             while (seqs->next()) {
-                seq_item item = { reply.add_stats(), SequenceStats(seqs->getLength()) };
+                seq_item item = { _response.add_stats(), SequenceStats(seqs->getLength()) };
                 seqs_map.insert(make_pair(seqs->getName(), std::move(item)));
             }
             delete seqs;
@@ -1522,8 +1503,7 @@ void WorkerJob<const vti::getEventsStatsRequest, vti::getEventsStatsResponse >
     }
     delete ds;
 
-    reply.set_allocated_res(res);
-    
+
 
     VTSERVER_DEBUG_REPLY;
 }
@@ -1534,8 +1514,8 @@ void WorkerJob<const vti::getProcessingMetadataRequest, vti::getProcessingMetada
 {
     VTSERVER_DEBUG_REQUEST;
 
-    vti::getProcessingMetadataResponse reply;
     vti::requestResult *res = new vti::requestResult();
+    _response.set_allocated_res(res);
 
     Dataset *ds = args._vtapi.loadDatasets(_request.dataset_id());
     if (ds->next()) {
@@ -1603,7 +1583,7 @@ void WorkerJob<const vti::getProcessingMetadataRequest, vti::getProcessingMetada
 
             // construct reply
             vti::processingMetadataSequenceType *md = new vti::processingMetadataSequenceType();
-            reply.set_allocated_metadata_seqtype(md);
+            _response.set_allocated_metadata_seqtype(md);
             for (auto & item : rate_occurrences) {
                 vti::classIdOccurence *occ = md->add_class_id_occurence();
                 occ->set_class_id(item._id);
@@ -1622,7 +1602,6 @@ void WorkerJob<const vti::getProcessingMetadataRequest, vti::getProcessingMetada
     }
     delete ds;
 
-    reply.set_allocated_res(res);
     
 
     VTSERVER_DEBUG_REPLY;
