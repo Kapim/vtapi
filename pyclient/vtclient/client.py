@@ -1,6 +1,6 @@
 import grpc
-import vtserver_interface_pb2
-import vtserver_interface_pb2_grpc
+from vtclient import vtserver_interface_pb2
+from vtclient import vtserver_interface_pb2_grpc
 from protodict import to_dict, to_protobuf
 from google.protobuf.message import EncodeError
 
