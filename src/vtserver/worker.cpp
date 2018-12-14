@@ -201,6 +201,7 @@ void WorkerJobBase::parseFilter(const vtserver_interface::eventFilter &filter, v
 #endif
 
 
+
 template<>
 void WorkerJob<const vti::addDatasetRequest, vti::addDatasetResponse >
 ::process(Args & args)
